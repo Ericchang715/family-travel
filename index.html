@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#18332d">
+  <meta name="description" content="比較全家出國旅遊方案，規劃行程、預算與出發準備。">
+  <title>全家人出國旅遊規劃工作台</title>
+  <link rel="icon" href="./assets/compass.svg" type="image/svg+xml">
+  <link rel="preload" href="./assets/hero.webp" as="image">
+  <link rel="stylesheet" href="./assets/style.css">
+  <script defer src="./assets/model.js"></script>
+  <script defer src="./assets/seed.js"></script>
+  <script defer src="./assets/ui.js"></script>
+  <script defer src="./assets/app.js"></script>
+</head>
+<body>
+  <a href="#workspace" class="skip-link">跳到主要內容</a>
+  <div class="shell">
+    <aside id="sidebar" class="sidebar" aria-label="工作台導覽">
+      <a href="#overview" class="brand"><span id="brand-icon" class="brand-icon"></span>遠行計畫</a>
+      <nav id="navigation" aria-label="工作台功能"></nav>
+      <div id="footer-nav" class="footer-nav"></div>
+    </aside>
+    <button id="backdrop" class="backdrop" type="button" aria-label="關閉選單" hidden></button>
+    <div class="frame">
+      <header class="topbar">
+        <div class="crumbs">
+          <button id="menu" type="button" class="button icon-button menu" aria-label="開啟選單" aria-expanded="false" aria-controls="sidebar"></button>
+          <a href="#overview">旅遊工作台</a><span aria-hidden="true">/</span><strong id="page-label" aria-current="page">規劃總覽</strong>
+        </div>
+        <div class="top-actions"><span id="save-indicator" class="save-indicator">本機儲存</span>
+          <button id="export" class="button subtle" type="button" data-action="export">匯出備份</button>
+        </div>
+      </header>
+      <main class="workspace" id="workspace" tabindex="-1">
+        <noscript><p>請啟用 JavaScript，即可使用旅遊規劃工作台。</p></noscript>
+      </main>
+    </div>
+  </div>
+  <dialog id="dialog" aria-labelledby="dialog-title">
+    <form id="editor">
+      <header class="dialog-header"><h2 id="dialog-title"></h2><button id="close-dialog" type="button" class="button icon-button" aria-label="關閉視窗" data-action="close"></button></header>
+      <div id="fields" class="dialog-fields"></div>
+      <p id="error" class="form-error" role="alert" hidden></p>
+      <footer class="dialog-footer"><button type="button" class="button subtle" data-action="close">取消</button><button id="submit" class="button primary" type="submit">儲存</button></footer>
+    </form>
+  </dialog>
+  <input id="import" type="file" accept=".json,application/json" hidden>
+  <p id="toast" class="toast" role="status" hidden></p>
+</body>
+</html>
