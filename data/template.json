@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "weights": {
+    "budget": 30,
+    "dates": 25,
+    "family": 30,
+    "travel": 15
+  },
+  "trips": [],
+  "members": [],
+  "itinerary": [],
+  "flights": [],
+  "stays": [],
+  "budgetItems": [],
+  "expenses": [],
+  "tasks": [],
+  "documents": []
+}

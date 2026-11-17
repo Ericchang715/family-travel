@@ -1,0 +1,968 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "全家人出國旅遊規劃工作台資料",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "trips",
+    "members",
+    "itinerary",
+    "flights",
+    "stays",
+    "budgetItems",
+    "expenses",
+    "tasks",
+    "documents"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": 1
+    },
+    "exportedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "weights": {
+      "type": "object",
+      "required": [
+        "budget",
+        "dates",
+        "family",
+        "travel"
+      ],
+      "properties": {
+        "budget": {
+          "title": "預算符合度",
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "dates": {
+          "title": "日期便利度",
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "family": {
+          "title": "家人喜好",
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "travel": {
+          "title": "交通便利度",
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 100
+        }
+      },
+      "anyOf": [
+        {
+          "properties": {
+            "budget": {
+              "minimum": 1
+            }
+          }
+        },
+        {
+          "properties": {
+            "dates": {
+              "minimum": 1
+            }
+          }
+        },
+        {
+          "properties": {
+            "family": {
+              "minimum": 1
+            }
+          }
+        },
+        {
+          "properties": {
+            "travel": {
+              "minimum": 1
+            }
+          }
+        }
+      ]
+    },
+    "trips": {
+      "title": "方案",
+      "type": "array",
+      "maxItems": 3000,
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "destination",
+          "country",
+          "name"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]{0,79}$"
+          },
+          "destination": {
+            "title": "目的地",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 180
+          },
+          "country": {
+            "title": "國家或地區",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 180
+          },
+          "name": {
+            "title": "方案名稱",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 180
+          },
+          "status": {
+            "title": "準備狀態",
+            "enum": [
+              "idea",
+              "planning",
+              "ready",
+              "completed"
+            ]
+          },
+          "artwork": {
+            "title": "封面圖",
+            "enum": [
+              "default",
+              "hokkaido",
+              "seoul",
+              "germany",
+              "italy"
+            ]
+          },
+          "startDate": {
+            "title": "預計出發日",
+            "anyOf": [
+              {
+                "const": ""
+              },
+              {
+                "type": "string",
+                "format": "date"
+              }
+            ]
+          },
+          "endDate": {
+            "title": "預計回程日",
+            "anyOf": [
+              {
+                "const": ""
+              },
+              {
+                "type": "string",
+                "format": "date"
+              }
+            ]
+          },
+          "budgetLimit": {
+            "title": "全家預算上限（NT$）",
+            "type": [
+              "integer",
+              "null"
+            ],
+            "minimum": 0,
+            "maximum": 999999999
+          },
+          "dateNotes": {
+            "title": "日期備註",
+            "type": "string",
+            "minLength": 0,
+            "maxLength": 180
+          },
+          "activities": {
+            "title": "活動類型",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 60
+            },
+            "maxItems": 50
+          },
+          "notes": {
+            "title": "備註",
+            "type": "string",
+            "minLength": 0,
+            "maxLength": 4000
+          },
+          "confirmed": {
+            "title": "方案基本資料已確認",
+            "type": "boolean"
+          },
+          "ratings": {
+            "type": "object",
+            "properties": {
+              "budget": {
+                "title": "預算符合度",
+                "type": [
+                  "integer",
+                  "null"
+                ],
+                "minimum": 1,
+                "maximum": 5
+              },
+              "dates": {
+                "title": "日期便利度",
+                "type": [
+                  "integer",
+                  "null"
+                ],
+                "minimum": 1,
+                "maximum": 5
+              },
+              "family": {
+                "title": "家人喜好",
+                "type": [
+                  "integer",
+                  "null"
+                ],
+                "minimum": 1,
+                "maximum": 5
+              },
+              "travel": {
+                "title": "交通便利度",
+                "type": [
+                  "integer",
+                  "null"
+                ],
+                "minimum": 1,
+                "maximum": 5
+              }
+            }
+          },
+          "previousStatus": {
+            "enum": [
+              "idea",
+              "planning",
+              "ready"
+            ]
+          }
+        }
+      }
+    },
+    "members": {
+      "title": "家庭成員",
+      "type": "array",
+      "maxItems": 3000,
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "name"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]{0,79}$"
+          },
+          "name": {
+            "title": "稱呼",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 180
+          },
+          "interests": {
+            "title": "想做的事",
+            "type": "string",
+            "minLength": 0,
+            "maxLength": 180
+          },
+          "priorities": {
+            "title": "最在意的安排",
+            "type": "string",
+            "minLength": 0,
+            "maxLength": 4000
+          },
+          "avoid": {
+            "title": "想避開的安排",
+            "type": "string",
+            "minLength": 0,
+            "maxLength": 4000
+          },
+          "needs": {
+            "title": "飲食與行動需求",
+            "type": "string",
+            "minLength": 0,
+            "maxLength": 4000
+          },
+          "notes": {
+            "title": "備註",
+            "type": "string",
+            "minLength": 0,
+            "maxLength": 4000
+          }
+        }
+      }
+    },
+    "itinerary": {
+      "title": "行程項目",
+      "type": "array",
+      "maxItems": 3000,
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "tripId",
+          "title"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]{0,79}$"
+          },
+          "tripId": {
+            "title": "所屬方案",
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]{0,79}$"
+          },
+          "day": {
+            "title": "第幾天",
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 365
+          },
+          "title": {
+            "title": "活動名稱",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 180
+          },
+          "time": {
+            "title": "當地時間",
+            "anyOf": [
+              {
+                "const": ""
+              },
+              {
+                "type": "string",
+                "pattern": "^([01]\\d|2[0-3]):[0-5]\\d$"
+              }
+            ]
+          },
+          "place": {
+            "title": "地點",
+            "type": "string",
+            "minLength": 0,
+            "maxLength": 180
+          },
+          "activity": {
+            "title": "活動類型",
+            "type": "string",
+            "minLength": 0,
+            "maxLength": 180
+          },
+          "confirmed": {
+            "title": "資料已確認",
+            "type": "boolean"
+          },
+          "url": {
+            "title": "來源網址",
+            "anyOf": [
+              {
+                "const": ""
+              },
+              {
+                "type": "string",
+                "format": "uri",
+                "pattern": "^https?://",
+                "maxLength": 2048
+              }
+            ]
+          },
+          "notes": {
+            "title": "備註",
+            "type": "string",
+            "minLength": 0,
+            "maxLength": 4000
+          },
+          "order": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 1000000
+          }
+        }
+      }
+    },
+    "flights": {
+      "title": "航班候選",
+      "type": "array",
+      "maxItems": 3000,
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "tripId",
+          "title"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]{0,79}$"
+          },
+          "tripId": {
+            "title": "所屬方案",
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]{0,79}$"
+          },
+          "status": {
+            "title": "候選狀態",
+            "enum": [
+              "candidate",
+              "short",
+              "booked"
+            ]
+          },
+          "title": {
+            "title": "航空公司或班次",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 180
+          },
+          "origin": {
+            "title": "出發機場",
+            "type": "string",
+            "minLength": 0,
+            "maxLength": 180
+          },
+          "arrival": {
+            "title": "抵達機場",
+            "type": "string",
+            "minLength": 0,
+            "maxLength": 180
+          },
+          "departs": {
+            "title": "去程起飛（當地時間）",
+            "anyOf": [
+              {
+                "const": ""
+              },
+              {
+                "type": "string",
+                "pattern": "^\\d{4}-\\d{2}-\\d{2}T([01]\\d|2[0-3]):[0-5]\\d$"
+              }
+            ]
+          },
+          "returns": {
+            "title": "回程起飛（當地時間）",
+            "anyOf": [
+              {
+                "const": ""
+              },
+              {
+                "type": "string",
+                "pattern": "^\\d{4}-\\d{2}-\\d{2}T([01]\\d|2[0-3]):[0-5]\\d$"
+              }
+            ]
+          },
+          "amount": {
+            "title": "全家總價（NT$）",
+            "type": [
+              "integer",
+              "null"
+            ],
+            "minimum": 0,
+            "maximum": 999999999
+          },
+          "checkedDate": {
+            "title": "查證日期",
+            "anyOf": [
+              {
+                "const": ""
+              },
+              {
+                "type": "string",
+                "format": "date"
+              }
+            ]
+          },
+          "url": {
+            "title": "來源網址",
+            "anyOf": [
+              {
+                "const": ""
+              },
+              {
+                "type": "string",
+                "format": "uri",
+                "pattern": "^https?://",
+                "maxLength": 2048
+              }
+            ]
+          },
+          "notes": {
+            "title": "備註",
+            "type": "string",
+            "minLength": 0,
+            "maxLength": 4000
+          },
+          "confirmed": {
+            "title": "航班與金額已確認",
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    "stays": {
+      "title": "住宿候選",
+      "type": "array",
+      "maxItems": 3000,
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "tripId",
+          "title"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]{0,79}$"
+          },
+          "tripId": {
+            "title": "所屬方案",
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]{0,79}$"
+          },
+          "status": {
+            "title": "候選狀態",
+            "enum": [
+              "candidate",
+              "short",
+              "booked"
+            ]
+          },
+          "title": {
+            "title": "住宿名稱",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 180
+          },
+          "area": {
+            "title": "住宿區域",
+            "type": "string",
+            "minLength": 0,
+            "maxLength": 180
+          },
+          "room": {
+            "title": "房型或房間數",
+            "type": "string",
+            "minLength": 0,
+            "maxLength": 180
+          },
+          "checkIn": {
+            "title": "入住日",
+            "anyOf": [
+              {
+                "const": ""
+              },
+              {
+                "type": "string",
+                "format": "date"
+              }
+            ]
+          },
+          "checkOut": {
+            "title": "退房日",
+            "anyOf": [
+              {
+                "const": ""
+              },
+              {
+                "type": "string",
+                "format": "date"
+              }
+            ]
+          },
+          "amount": {
+            "title": "全家總價（NT$）",
+            "type": [
+              "integer",
+              "null"
+            ],
+            "minimum": 0,
+            "maximum": 999999999
+          },
+          "checkedDate": {
+            "title": "查證日期",
+            "anyOf": [
+              {
+                "const": ""
+              },
+              {
+                "type": "string",
+                "format": "date"
+              }
+            ]
+          },
+          "url": {
+            "title": "來源網址",
+            "anyOf": [
+              {
+                "const": ""
+              },
+              {
+                "type": "string",
+                "format": "uri",
+                "pattern": "^https?://",
+                "maxLength": 2048
+              }
+            ]
+          },
+          "notes": {
+            "title": "備註",
+            "type": "string",
+            "minLength": 0,
+            "maxLength": 4000
+          },
+          "confirmed": {
+            "title": "住宿與金額已確認",
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    "budgetItems": {
+      "title": "預算項目",
+      "type": "array",
+      "maxItems": 3000,
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "tripId",
+          "title",
+          "amount"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]{0,79}$"
+          },
+          "tripId": {
+            "title": "所屬方案",
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]{0,79}$"
+          },
+          "category": {
+            "title": "預算分類",
+            "enum": [
+              "flights",
+              "stays",
+              "transport",
+              "food",
+              "tickets",
+              "insurance",
+              "shopping",
+              "reserve",
+              "other"
+            ]
+          },
+          "title": {
+            "title": "項目名稱",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 180
+          },
+          "amount": {
+            "title": "預估金額（NT$）",
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 999999999
+          },
+          "notes": {
+            "title": "備註",
+            "type": "string",
+            "minLength": 0,
+            "maxLength": 4000
+          },
+          "confirmed": {
+            "title": "金額已確認",
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    "expenses": {
+      "title": "支出",
+      "type": "array",
+      "maxItems": 3000,
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "tripId",
+          "title",
+          "amount",
+          "paidBy",
+          "shareWith"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]{0,79}$"
+          },
+          "tripId": {
+            "title": "所屬方案",
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]{0,79}$"
+          },
+          "category": {
+            "title": "支出分類",
+            "enum": [
+              "flights",
+              "stays",
+              "transport",
+              "food",
+              "tickets",
+              "insurance",
+              "shopping",
+              "reserve",
+              "other"
+            ]
+          },
+          "title": {
+            "title": "項目名稱",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 180
+          },
+          "amount": {
+            "title": "實付金額（NT$）",
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 999999999
+          },
+          "date": {
+            "title": "付款日期",
+            "anyOf": [
+              {
+                "const": ""
+              },
+              {
+                "type": "string",
+                "format": "date"
+              }
+            ]
+          },
+          "paidBy": {
+            "title": "代墊成員",
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]{0,79}$"
+          },
+          "shareWith": {
+            "title": "參與分攤的成員",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]{0,79}$"
+            },
+            "minItems": 1,
+            "maxItems": 50
+          },
+          "notes": {
+            "title": "備註",
+            "type": "string",
+            "minLength": 0,
+            "maxLength": 4000
+          },
+          "confirmed": {
+            "title": "付款與分攤名單已確認",
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    "tasks": {
+      "title": "待辦",
+      "type": "array",
+      "maxItems": 3000,
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "title"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]{0,79}$"
+          },
+          "tripId": {
+            "title": "所屬方案",
+            "anyOf": [
+              {
+                "const": ""
+              },
+              {
+                "type": "string",
+                "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]{0,79}$"
+              }
+            ]
+          },
+          "status": {
+            "title": "進度",
+            "enum": [
+              "todo",
+              "doing",
+              "done"
+            ]
+          },
+          "title": {
+            "title": "待辦名稱",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 180
+          },
+          "memberId": {
+            "title": "負責成員",
+            "anyOf": [
+              {
+                "const": ""
+              },
+              {
+                "type": "string",
+                "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]{0,79}$"
+              }
+            ]
+          },
+          "dueDate": {
+            "title": "截止日",
+            "anyOf": [
+              {
+                "const": ""
+              },
+              {
+                "type": "string",
+                "format": "date"
+              }
+            ]
+          },
+          "notes": {
+            "title": "備註",
+            "type": "string",
+            "minLength": 0,
+            "maxLength": 4000
+          }
+        }
+      }
+    },
+    "documents": {
+      "title": "文件紀錄",
+      "type": "array",
+      "maxItems": 3000,
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "title"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]{0,79}$"
+          },
+          "tripId": {
+            "title": "所屬方案",
+            "anyOf": [
+              {
+                "const": ""
+              },
+              {
+                "type": "string",
+                "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]{0,79}$"
+              }
+            ]
+          },
+          "type": {
+            "title": "文件類型",
+            "enum": [
+              "passport",
+              "entry",
+              "tickets",
+              "booking",
+              "insurance",
+              "other"
+            ]
+          },
+          "title": {
+            "title": "文件名稱",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 180
+          },
+          "memberId": {
+            "title": "適用成員",
+            "anyOf": [
+              {
+                "const": ""
+              },
+              {
+                "type": "string",
+                "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]{0,79}$"
+              }
+            ]
+          },
+          "expiry": {
+            "title": "有效期限",
+            "anyOf": [
+              {
+                "const": ""
+              },
+              {
+                "type": "string",
+                "format": "date"
+              }
+            ]
+          },
+          "status": {
+            "title": "準備狀態",
+            "enum": [
+              "needed",
+              "preparing",
+              "ready"
+            ]
+          },
+          "checkedDate": {
+            "title": "查證日期",
+            "anyOf": [
+              {
+                "const": ""
+              },
+              {
+                "type": "string",
+                "format": "date"
+              }
+            ]
+          },
+          "location": {
+            "title": "存放位置提示",
+            "type": "string",
+            "minLength": 0,
+            "maxLength": 180
+          },
+          "notes": {
+            "title": "備註",
+            "type": "string",
+            "minLength": 0,
+            "maxLength": 4000
+          },
+          "confirmed": {
+            "title": "文件資訊已確認",
+            "type": "boolean"
+          }
+        }
+      }
+    }
+  }
+}
